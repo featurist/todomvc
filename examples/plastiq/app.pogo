@@ -39,14 +39,25 @@ main (state) =
     )
 
 todoItem (todo, state) =
-  h 'li' { className = if (todo.completed) @{ 'completed' } } (
+  h 'li' { className = todoClass(todo) } (
     h 'div.view' (
       h 'input.toggle' { type = 'checkbox', model = bind(todo, 'completed') }
       h 'label' { ondblclick () = (todo.editing = true) } (todo.title)
       h 'button.destroy' { onclick () = state.destroyTodo (todo) }
     )
-    h 'input.edit' { model = bind(todo, 'title') }
+    h 'input.edit' {
+      model = bind(todo, 'title')
+      onkeyup (e) =
+        if (isEnterKey(e))
+          todo.editing = false
+    }
   )
+
+todoClass(todo) =
+  classes = []
+  if (todo.completed) @{ classes.push 'completed' }
+  if (todo.editing) @{ classes.push 'editing' }
+  classes.join(' ')
 
 footer (state) =
   h 'footer#footer' (
