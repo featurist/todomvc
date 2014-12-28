@@ -1,0 +1,19 @@
+{
+  "name": "plastiq-todomvc",
+  "description": "TodoMVC Implementation in plastiq.js",
+  "version": "1.0.0",
+  "author": "Josh Chisholm <joshuachisholm@gmail.com>",
+  "private": true,
+  "dependencies": {},
+  "devDependencies": {
+    "bluebird": "^2.4.3",
+    "browserify": "^8.0.2",
+    "plastiq": "^1.2.2",
+    "pogo": "^0.9.6",
+    "watchify": "^2.2.1"
+  },
+  "scripts": {
+    "build": "browserify app.pogo -t pogoify -o js/app.js",
+    "watch": "watchify app.pogo -t pogoify -o js/app.js"
+  }
+}
