@@ -24,7 +24,8 @@ header (model) =
   )
 
 main (model) =
-  if (model.todos.length > 0)
+  todos = model.filteredTodos()
+  if (todos.length > 0)
     h 'section#main' (
       h 'input#toggle-all' {
         type       = 'checkbox'
@@ -32,36 +33,42 @@ main (model) =
         onclick () = model.toggleAll()
       }
       h "label" { htmlFor = 'toggle-all' } 'Mark all as complete'
-      h 'ul#todo-list' [t <- model.filteredTodos(), todoItem (t, model)]
+      h 'ul#todo-list' [t <- todos, todoItem (t, model)]
     )
 
 todoItem (todo, model) =
-  h 'li' { className = { completed = todo.completed, editing = todo.editing } } (
+  editing = (model.editing == todo)
+  h 'li' { className = { completed = todo.completed, editing = editing } } (
     h 'div.view' (
       h 'input.toggle'   { type = 'checkbox', binding = bind(todo, 'completed') }
-      h 'label'          { ondblclick () = (todo.editing = true) } (todo.title)
+      h 'label'          { ondblclick () = model.editing = todo } (todo.title)
       h 'button.destroy' { onclick () = model.destroyTodo (todo) }
     )
     h 'input.edit' {
       binding     = bind(todo, 'title')
-      onkeyup (e) = (todo.editing = @not isEnterKey(e))
+      onblur ()   = model.editing = nil
+      onkeyup (e) =
+        if (isEnterKey(e) @or isEscapeKey(e))
+          model.editing = nil
     }
   )
 
 footer (model) =
+  active = model.countActive ()
+  completed = model.countCompleted ()
   h 'footer#footer' (
     h 'span#todo-count' (
-      h 'strong' (model.todos.length)
-      if (model.todos.length == 1) @{ ' item left' } else @{ ' items left' }
+      h 'strong' (active)
+      if (active == 1) @{ ' item left' } else @{ ' items left' }
     )
     h 'ul#filters' (
       filter (model, 'All')
       filter (model, 'Active')
       filter (model, 'Completed')
     )
-    if (model.countCompleted () > 0)
+    if (completed > 0)
       h 'button#clear-completed' { onclick () = model.clearCompleted () } (
-        "Clear completed (#(model.countCompleted()))"
+        "Clear completed (#( completed ))"
       )
   )
 
@@ -69,7 +76,7 @@ filter (model, name) =
   h 'li' (
     h 'a' {
       href = "##(name)"
-      className = { selected = model.filter == name }
+      className = { selected = (model.filter == name) }
       onclick (e) =
         e.preventDefault ()
         model.filter = name
@@ -80,8 +87,10 @@ info () =
   h 'footer#info' (
     h 'p' 'Double-click to edit a todo'
     h 'p' (
-      'Created with '
-      h 'a' { href = 'https://github.com/featurist/plastiq' } 'Plastiq'
+      'Created by '
+      h 'a' { href = 'https://github.com/joshski' } '@joshski'
+      ' with '
+      h 'a' { href = 'https://github.com/featurist/plastiq' } 'plastiq'
     )
     h 'p' (
       'Part of '
@@ -90,20 +99,25 @@ info () =
   )
 
 isEnterKey (e) = e.keyCode == 13
+isEscapeKey (e) = e.keyCode == 27
 
 model = {
   title = ''
   todos = []
   filter = 'All'
+  editing = nil
 
   filters = {
-    All ()       = self.todos
-    Active ()    = [ t <- self.todos, @not t.completed, t ]
-    Completed () = [ t <- self.todos, t.completed, t ]
+    All (todos)       = todos
+    Active (todos)    = [ t <- todos, @not t.completed, t ]
+    Completed (todos) = [ t <- todos, t.completed, t ]
   }
 
   filteredTodos () =
-    self.filters.(self.filter).call(self)
+    self.todosInState (self.filter)
+
+  todosInState (state) =
+    self.filters.(state).call (self, self.todos)
 
   createTodo () =
     if (self.title != '')
@@ -117,14 +131,17 @@ model = {
     completed = @not self.allCompleted ()
     [ t <- self.todos, t.completed = completed ]
 
+  countActive () =
+    self.todosInState ('Active').length
+
   countCompleted () =
-    [ t <- self.todos, t.completed, t ].length
+    self.todosInState ('Completed').length
 
   allCompleted () =
     self.countCompleted () == self.todos.length
 
   clearCompleted () =
-    [ t <- [].concat (self.todos), t.completed, self.destroyTodo (t) ]
+    [ t <- self.todosInState ('Completed'), self.destroyTodo (t) ]
 }
 
 plastiq.attach (document.body, render, model)

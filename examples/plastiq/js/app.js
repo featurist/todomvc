@@ -1,7 +1,7 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({"/Users/joshuachisholm/projects/todomvc/examples/plastiq/app.pogo":[function(require,module,exports){
 (function() {
     var self = this;
-    var plastiq, h, bind, render, header, main, todoItem, footer, filter, info, isEnterKey, model;
+    var plastiq, h, bind, render, header, main, todoItem, footer, filter, info, isEnterKey, isEscapeKey, model;
     plastiq = require("plastiq");
     h = plastiq.html;
     bind = plastiq.bind;
@@ -22,7 +22,9 @@
         }));
     };
     main = function(model) {
-        if (model.todos.length > 0) {
+        var todos;
+        todos = model.filteredTodos();
+        if (todos.length > 0) {
             return h("section#main", h("input#toggle-all", {
                 type: "checkbox",
                 checked: model.allCompleted(),
@@ -35,7 +37,7 @@
             }, "Mark all as complete"), h("ul#todo-list", function() {
                 var gen1_results, gen2_items, gen3_i, t;
                 gen1_results = [];
-                gen2_items = model.filteredTodos();
+                gen2_items = todos;
                 for (gen3_i = 0; gen3_i < gen2_items.length; ++gen3_i) {
                     t = gen2_items[gen3_i];
                     (function(t) {
@@ -47,10 +49,12 @@
         }
     };
     todoItem = function(todo, model) {
+        var editing;
+        editing = model.editing === todo;
         return h("li", {
             className: {
                 completed: todo.completed,
-                editing: todo.editing
+                editing: editing
             }
         }, h("div.view", h("input.toggle", {
             type: "checkbox",
@@ -58,7 +62,7 @@
         }), h("label", {
             ondblclick: function() {
                 var self = this;
-                return todo.editing = true;
+                return model.editing = todo;
             }
         }, todo.title), h("button.destroy", {
             onclick: function() {
@@ -67,27 +71,36 @@
             }
         })), h("input.edit", {
             binding: bind(todo, "title"),
+            onblur: function() {
+                var self = this;
+                return model.editing = void 0;
+            },
             onkeyup: function(e) {
                 var self = this;
-                return todo.editing = !isEnterKey(e);
+                if (isEnterKey(e) || isEscapeKey(e)) {
+                    return model.editing = void 0;
+                }
             }
         }));
     };
     footer = function(model) {
-        return h("footer#footer", h("span#todo-count", h("strong", model.todos.length), function() {
-            if (model.todos.length === 1) {
+        var active, completed;
+        active = model.countActive();
+        completed = model.countCompleted();
+        return h("footer#footer", h("span#todo-count", h("strong", active), function() {
+            if (active === 1) {
                 return " item left";
             } else {
                 return " items left";
             }
         }()), h("ul#filters", filter(model, "All"), filter(model, "Active"), filter(model, "Completed")), function() {
-            if (model.countCompleted() > 0) {
+            if (completed > 0) {
                 return h("button#clear-completed", {
                     onclick: function() {
                         var self = this;
                         return model.clearCompleted();
                     }
-                }, "Clear completed (" + model.countCompleted() + ")");
+                }, "Clear completed (" + completed + ")");
             }
         }());
     };
@@ -105,30 +118,36 @@
         }, name));
     };
     info = function() {
-        return h("footer#info", h("p", "Double-click to edit a todo"), h("p", "Created with ", h("a", {
+        return h("footer#info", h("p", "Double-click to edit a todo"), h("p", "Created by ", h("a", {
+            href: "https://github.com/joshski"
+        }, "@joshski"), " with ", h("a", {
             href: "https://github.com/featurist/plastiq"
-        }, "Plastiq")), h("p", "Part of ", h("a", {
+        }, "plastiq")), h("p", "Part of ", h("a", {
             href: "http://todomvc.com"
         }, "TodoMVC")));
     };
     isEnterKey = function(e) {
         return e.keyCode === 13;
     };
+    isEscapeKey = function(e) {
+        return e.keyCode === 27;
+    };
     model = {
         title: "",
         todos: [],
         filter: "All",
+        editing: void 0,
         filters: {
-            All: function() {
+            All: function(todos) {
                 var self = this;
-                return self.todos;
+                return todos;
             },
-            Active: function() {
+            Active: function(todos) {
                 var self = this;
                 return function() {
                     var gen4_results, gen5_items, gen6_i, t;
                     gen4_results = [];
-                    gen5_items = self.todos;
+                    gen5_items = todos;
                     for (gen6_i = 0; gen6_i < gen5_items.length; ++gen6_i) {
                         t = gen5_items[gen6_i];
                         (function(t) {
@@ -140,12 +159,12 @@
                     return gen4_results;
                 }();
             },
-            Completed: function() {
+            Completed: function(todos) {
                 var self = this;
                 return function() {
                     var gen7_results, gen8_items, gen9_i, t;
                     gen7_results = [];
-                    gen8_items = self.todos;
+                    gen8_items = todos;
                     for (gen9_i = 0; gen9_i < gen8_items.length; ++gen9_i) {
                         t = gen8_items[gen9_i];
                         (function(t) {
@@ -160,7 +179,11 @@
         },
         filteredTodos: function() {
             var self = this;
-            return self.filters[self.filter].call(self);
+            return self.todosInState(self.filter);
+        },
+        todosInState: function(state) {
+            var self = this;
+            return self.filters[state].call(self, self.todos);
         },
         createTodo: function() {
             var self = this;
@@ -193,22 +216,13 @@
                 return gen10_results;
             }();
         },
+        countActive: function() {
+            var self = this;
+            return self.todosInState("Active").length;
+        },
         countCompleted: function() {
             var self = this;
-            return function() {
-                var gen13_results, gen14_items, gen15_i, t;
-                gen13_results = [];
-                gen14_items = self.todos;
-                for (gen15_i = 0; gen15_i < gen14_items.length; ++gen15_i) {
-                    t = gen14_items[gen15_i];
-                    (function(t) {
-                        if (t.completed) {
-                            return gen13_results.push(t);
-                        }
-                    })(t);
-                }
-                return gen13_results;
-            }().length;
+            return self.todosInState("Completed").length;
         },
         allCompleted: function() {
             var self = this;
@@ -217,18 +231,16 @@
         clearCompleted: function() {
             var self = this;
             return function() {
-                var gen16_results, gen17_items, gen18_i, t;
-                gen16_results = [];
-                gen17_items = [].concat(self.todos);
-                for (gen18_i = 0; gen18_i < gen17_items.length; ++gen18_i) {
-                    t = gen17_items[gen18_i];
+                var gen13_results, gen14_items, gen15_i, t;
+                gen13_results = [];
+                gen14_items = self.todosInState("Completed");
+                for (gen15_i = 0; gen15_i < gen14_items.length; ++gen15_i) {
+                    t = gen14_items[gen15_i];
                     (function(t) {
-                        if (t.completed) {
-                            return gen16_results.push(self.destroyTodo(t));
-                        }
+                        return gen13_results.push(self.destroyTodo(t));
                     })(t);
                 }
-                return gen16_results;
+                return gen13_results;
             }();
         }
     };
