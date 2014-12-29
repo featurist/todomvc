@@ -1620,6 +1620,22 @@
 			}]
 		}]
 	},
+	"plastiq": {
+		"name": "Plastiq",
+		"description": "Plastiq is a tiny MVC library using a virtual DOM but no component model",
+		"homepage": "github.com/featurist/plastiq",
+		"examples": [{
+			"name": "Example",
+			"url": "examples/plastiq"
+		}],
+		"link_groups": [{
+			"heading": "Official Resources",
+			"links": [{
+				"name": "Plastiq on GitHub",
+				"url": "https://github.com/featurist/plastiq"
+			}]
+		}]
+	},
 	"plastronjs": {
 		"name": "PlastronJS",
 		"description": "PlastronJS is an MVC library which uses the Google Closure library for use with the Closure Compiler.",

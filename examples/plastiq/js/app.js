@@ -1,4 +1,4 @@
-(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({"/Users/joshuachisholm/projects/todomvc/examples/plastiq/app.pogo":[function(require,module,exports){
+(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 (function() {
     var self = this;
     var plastiq, h, bind, render, header, main, todoItem, footer, filter, info, isEnterKey, isEscapeKey, model;
@@ -120,11 +120,7 @@
     info = function() {
         return h("footer#info", h("p", "Double-click to edit a todo"), h("p", "Created by ", h("a", {
             href: "https://github.com/joshski"
-        }, "@joshski"), " with ", h("a", {
-            href: "https://github.com/featurist/plastiq"
-        }, "plastiq"), " and ", h("a", {
-            href: "https://github.com/featurist/pogoscript"
-        }, "pogo")), h("p", "Part of ", h("a", {
+        }, "Josh Chisholm")), h("p", "Part of ", h("a", {
             href: "http://todomvc.com"
         }, "TodoMVC")));
     };
@@ -248,7 +244,9 @@
     };
     plastiq.attach(document.body, render, model);
 }).call(this);
-},{"plastiq":"/Users/joshuachisholm/projects/todomvc/examples/plastiq/node_modules/plastiq/index.js"}],"/Users/joshuachisholm/projects/todomvc/examples/plastiq/node_modules/plastiq/index.js":[function(require,module,exports){
+},{"plastiq":3}],2:[function(require,module,exports){
+
+},{}],3:[function(require,module,exports){
 var h = require('virtual-dom/h');
 var diff = require('virtual-dom/diff');
 var patch = require('virtual-dom/patch');
@@ -546,22 +544,22 @@ function generateClassName(obj) {
   }
 };
 
-},{"virtual-dom/create-element":"/Users/joshuachisholm/projects/todomvc/examples/plastiq/node_modules/plastiq/node_modules/virtual-dom/create-element.js","virtual-dom/diff":"/Users/joshuachisholm/projects/todomvc/examples/plastiq/node_modules/plastiq/node_modules/virtual-dom/diff.js","virtual-dom/h":"/Users/joshuachisholm/projects/todomvc/examples/plastiq/node_modules/plastiq/node_modules/virtual-dom/h.js","virtual-dom/patch":"/Users/joshuachisholm/projects/todomvc/examples/plastiq/node_modules/plastiq/node_modules/virtual-dom/patch.js"}],"/Users/joshuachisholm/projects/todomvc/examples/plastiq/node_modules/plastiq/node_modules/virtual-dom/create-element.js":[function(require,module,exports){
+},{"virtual-dom/create-element":4,"virtual-dom/diff":5,"virtual-dom/h":6,"virtual-dom/patch":19}],4:[function(require,module,exports){
 var createElement = require("./vdom/create-element.js")
 
 module.exports = createElement
 
-},{"./vdom/create-element.js":"/Users/joshuachisholm/projects/todomvc/examples/plastiq/node_modules/plastiq/node_modules/virtual-dom/vdom/create-element.js"}],"/Users/joshuachisholm/projects/todomvc/examples/plastiq/node_modules/plastiq/node_modules/virtual-dom/diff.js":[function(require,module,exports){
+},{"./vdom/create-element.js":21}],5:[function(require,module,exports){
 var diff = require("./vtree/diff.js")
 
 module.exports = diff
 
-},{"./vtree/diff.js":"/Users/joshuachisholm/projects/todomvc/examples/plastiq/node_modules/plastiq/node_modules/virtual-dom/vtree/diff.js"}],"/Users/joshuachisholm/projects/todomvc/examples/plastiq/node_modules/plastiq/node_modules/virtual-dom/h.js":[function(require,module,exports){
+},{"./vtree/diff.js":41}],6:[function(require,module,exports){
 var h = require("./virtual-hyperscript/index.js")
 
 module.exports = h
 
-},{"./virtual-hyperscript/index.js":"/Users/joshuachisholm/projects/todomvc/examples/plastiq/node_modules/plastiq/node_modules/virtual-dom/virtual-hyperscript/index.js"}],"/Users/joshuachisholm/projects/todomvc/examples/plastiq/node_modules/plastiq/node_modules/virtual-dom/node_modules/data-set/create-hash.js":[function(require,module,exports){
+},{"./virtual-hyperscript/index.js":29}],7:[function(require,module,exports){
 module.exports = createHash
 
 function createHash(elem) {
@@ -585,7 +583,7 @@ function createHash(elem) {
     return hash
 }
 
-},{}],"/Users/joshuachisholm/projects/todomvc/examples/plastiq/node_modules/plastiq/node_modules/virtual-dom/node_modules/data-set/index.js":[function(require,module,exports){
+},{}],8:[function(require,module,exports){
 var createStore = require("weakmap-shim/create-store")
 var Individual = require("individual")
 
@@ -605,7 +603,7 @@ function DataSet(elem) {
     return store.hash
 }
 
-},{"./create-hash.js":"/Users/joshuachisholm/projects/todomvc/examples/plastiq/node_modules/plastiq/node_modules/virtual-dom/node_modules/data-set/create-hash.js","individual":"/Users/joshuachisholm/projects/todomvc/examples/plastiq/node_modules/plastiq/node_modules/virtual-dom/node_modules/data-set/node_modules/individual/index.js","weakmap-shim/create-store":"/Users/joshuachisholm/projects/todomvc/examples/plastiq/node_modules/plastiq/node_modules/virtual-dom/node_modules/data-set/node_modules/weakmap-shim/create-store.js"}],"/Users/joshuachisholm/projects/todomvc/examples/plastiq/node_modules/plastiq/node_modules/virtual-dom/node_modules/data-set/node_modules/individual/index.js":[function(require,module,exports){
+},{"./create-hash.js":7,"individual":9,"weakmap-shim/create-store":10}],9:[function(require,module,exports){
 (function (global){
 var root = typeof window !== 'undefined' ?
     window : typeof global !== 'undefined' ?
@@ -627,7 +625,7 @@ function Individual(key, value) {
 }
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],"/Users/joshuachisholm/projects/todomvc/examples/plastiq/node_modules/plastiq/node_modules/virtual-dom/node_modules/data-set/node_modules/weakmap-shim/create-store.js":[function(require,module,exports){
+},{}],10:[function(require,module,exports){
 var hiddenStore = require('./hidden-store.js');
 
 module.exports = createStore;
@@ -646,7 +644,7 @@ function createStore() {
     };
 }
 
-},{"./hidden-store.js":"/Users/joshuachisholm/projects/todomvc/examples/plastiq/node_modules/plastiq/node_modules/virtual-dom/node_modules/data-set/node_modules/weakmap-shim/hidden-store.js"}],"/Users/joshuachisholm/projects/todomvc/examples/plastiq/node_modules/plastiq/node_modules/virtual-dom/node_modules/data-set/node_modules/weakmap-shim/hidden-store.js":[function(require,module,exports){
+},{"./hidden-store.js":11}],11:[function(require,module,exports){
 module.exports = hiddenStore;
 
 function hiddenStore(obj, key) {
@@ -664,7 +662,7 @@ function hiddenStore(obj, key) {
     return store;
 }
 
-},{}],"/Users/joshuachisholm/projects/todomvc/examples/plastiq/node_modules/plastiq/node_modules/virtual-dom/node_modules/error/node_modules/camelize/index.js":[function(require,module,exports){
+},{}],12:[function(require,module,exports){
 module.exports = function(obj) {
     if (typeof obj === 'string') return camelCase(obj);
     return walk(obj);
@@ -725,7 +723,7 @@ function reduce (xs, f, acc) {
     return acc;
 }
 
-},{}],"/Users/joshuachisholm/projects/todomvc/examples/plastiq/node_modules/plastiq/node_modules/virtual-dom/node_modules/error/node_modules/string-template/index.js":[function(require,module,exports){
+},{}],13:[function(require,module,exports){
 var nargs = /\{([0-9a-zA-Z]+)\}/g
 var slice = Array.prototype.slice
 
@@ -761,7 +759,7 @@ function template(string) {
     })
 }
 
-},{}],"/Users/joshuachisholm/projects/todomvc/examples/plastiq/node_modules/plastiq/node_modules/virtual-dom/node_modules/error/node_modules/xtend/mutable.js":[function(require,module,exports){
+},{}],14:[function(require,module,exports){
 module.exports = extend
 
 function extend(target) {
@@ -778,7 +776,7 @@ function extend(target) {
     return target
 }
 
-},{}],"/Users/joshuachisholm/projects/todomvc/examples/plastiq/node_modules/plastiq/node_modules/virtual-dom/node_modules/error/typed.js":[function(require,module,exports){
+},{}],15:[function(require,module,exports){
 var camelize = require("camelize")
 var template = require("string-template")
 var extend = require("xtend/mutable")
@@ -828,7 +826,7 @@ function TypedError(args) {
 }
 
 
-},{"camelize":"/Users/joshuachisholm/projects/todomvc/examples/plastiq/node_modules/plastiq/node_modules/virtual-dom/node_modules/error/node_modules/camelize/index.js","string-template":"/Users/joshuachisholm/projects/todomvc/examples/plastiq/node_modules/plastiq/node_modules/virtual-dom/node_modules/error/node_modules/string-template/index.js","xtend/mutable":"/Users/joshuachisholm/projects/todomvc/examples/plastiq/node_modules/plastiq/node_modules/virtual-dom/node_modules/error/node_modules/xtend/mutable.js"}],"/Users/joshuachisholm/projects/todomvc/examples/plastiq/node_modules/plastiq/node_modules/virtual-dom/node_modules/global/document.js":[function(require,module,exports){
+},{"camelize":12,"string-template":13,"xtend/mutable":14}],16:[function(require,module,exports){
 (function (global){
 var topLevel = typeof global !== 'undefined' ? global :
     typeof window !== 'undefined' ? window : {}
@@ -847,14 +845,14 @@ if (typeof document !== 'undefined') {
 }
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"min-document":"/Users/joshuachisholm/projects/todomvc/examples/plastiq/node_modules/watchify/node_modules/browserify/node_modules/browser-resolve/empty.js"}],"/Users/joshuachisholm/projects/todomvc/examples/plastiq/node_modules/plastiq/node_modules/virtual-dom/node_modules/is-object/index.js":[function(require,module,exports){
+},{"min-document":2}],17:[function(require,module,exports){
 "use strict";
 
 module.exports = function isObject(x) {
 	return typeof x === "object" && x !== null;
 };
 
-},{}],"/Users/joshuachisholm/projects/todomvc/examples/plastiq/node_modules/plastiq/node_modules/virtual-dom/node_modules/x-is-array/index.js":[function(require,module,exports){
+},{}],18:[function(require,module,exports){
 var nativeIsArray = Array.isArray
 var toString = Object.prototype.toString
 
@@ -864,12 +862,12 @@ function isArray(obj) {
     return toString.call(obj) === "[object Array]"
 }
 
-},{}],"/Users/joshuachisholm/projects/todomvc/examples/plastiq/node_modules/plastiq/node_modules/virtual-dom/patch.js":[function(require,module,exports){
+},{}],19:[function(require,module,exports){
 var patch = require("./vdom/patch.js")
 
 module.exports = patch
 
-},{"./vdom/patch.js":"/Users/joshuachisholm/projects/todomvc/examples/plastiq/node_modules/plastiq/node_modules/virtual-dom/vdom/patch.js"}],"/Users/joshuachisholm/projects/todomvc/examples/plastiq/node_modules/plastiq/node_modules/virtual-dom/vdom/apply-properties.js":[function(require,module,exports){
+},{"./vdom/patch.js":24}],20:[function(require,module,exports){
 var isObject = require("is-object")
 var isHook = require("../vnode/is-vhook.js")
 
@@ -965,7 +963,7 @@ function getPrototype(value) {
     }
 }
 
-},{"../vnode/is-vhook.js":"/Users/joshuachisholm/projects/todomvc/examples/plastiq/node_modules/plastiq/node_modules/virtual-dom/vnode/is-vhook.js","is-object":"/Users/joshuachisholm/projects/todomvc/examples/plastiq/node_modules/plastiq/node_modules/virtual-dom/node_modules/is-object/index.js"}],"/Users/joshuachisholm/projects/todomvc/examples/plastiq/node_modules/plastiq/node_modules/virtual-dom/vdom/create-element.js":[function(require,module,exports){
+},{"../vnode/is-vhook.js":33,"is-object":17}],21:[function(require,module,exports){
 var document = require("global/document")
 
 var applyProperties = require("./apply-properties")
@@ -1013,7 +1011,7 @@ function createElement(vnode, opts) {
     return node
 }
 
-},{"../vnode/handle-thunk.js":"/Users/joshuachisholm/projects/todomvc/examples/plastiq/node_modules/plastiq/node_modules/virtual-dom/vnode/handle-thunk.js","../vnode/is-vnode.js":"/Users/joshuachisholm/projects/todomvc/examples/plastiq/node_modules/plastiq/node_modules/virtual-dom/vnode/is-vnode.js","../vnode/is-vtext.js":"/Users/joshuachisholm/projects/todomvc/examples/plastiq/node_modules/plastiq/node_modules/virtual-dom/vnode/is-vtext.js","../vnode/is-widget.js":"/Users/joshuachisholm/projects/todomvc/examples/plastiq/node_modules/plastiq/node_modules/virtual-dom/vnode/is-widget.js","./apply-properties":"/Users/joshuachisholm/projects/todomvc/examples/plastiq/node_modules/plastiq/node_modules/virtual-dom/vdom/apply-properties.js","global/document":"/Users/joshuachisholm/projects/todomvc/examples/plastiq/node_modules/plastiq/node_modules/virtual-dom/node_modules/global/document.js"}],"/Users/joshuachisholm/projects/todomvc/examples/plastiq/node_modules/plastiq/node_modules/virtual-dom/vdom/dom-index.js":[function(require,module,exports){
+},{"../vnode/handle-thunk.js":31,"../vnode/is-vnode.js":34,"../vnode/is-vtext.js":35,"../vnode/is-widget.js":36,"./apply-properties":20,"global/document":16}],22:[function(require,module,exports){
 // Maps a virtual DOM tree onto a real DOM tree in an efficient manner.
 // We don't want to read all of the DOM nodes in the tree so we use
 // the in-order tree indexing to eliminate recursion down certain branches.
@@ -1100,7 +1098,7 @@ function ascending(a, b) {
     return a > b ? 1 : -1
 }
 
-},{}],"/Users/joshuachisholm/projects/todomvc/examples/plastiq/node_modules/plastiq/node_modules/virtual-dom/vdom/patch-op.js":[function(require,module,exports){
+},{}],23:[function(require,module,exports){
 var applyProperties = require("./apply-properties")
 
 var isWidget = require("../vnode/is-widget.js")
@@ -1272,7 +1270,7 @@ function replaceRoot(oldRoot, newRoot) {
     return newRoot;
 }
 
-},{"../vnode/is-widget.js":"/Users/joshuachisholm/projects/todomvc/examples/plastiq/node_modules/plastiq/node_modules/virtual-dom/vnode/is-widget.js","../vnode/vpatch.js":"/Users/joshuachisholm/projects/todomvc/examples/plastiq/node_modules/plastiq/node_modules/virtual-dom/vnode/vpatch.js","./apply-properties":"/Users/joshuachisholm/projects/todomvc/examples/plastiq/node_modules/plastiq/node_modules/virtual-dom/vdom/apply-properties.js","./create-element":"/Users/joshuachisholm/projects/todomvc/examples/plastiq/node_modules/plastiq/node_modules/virtual-dom/vdom/create-element.js","./update-widget":"/Users/joshuachisholm/projects/todomvc/examples/plastiq/node_modules/plastiq/node_modules/virtual-dom/vdom/update-widget.js"}],"/Users/joshuachisholm/projects/todomvc/examples/plastiq/node_modules/plastiq/node_modules/virtual-dom/vdom/patch.js":[function(require,module,exports){
+},{"../vnode/is-widget.js":36,"../vnode/vpatch.js":39,"./apply-properties":20,"./create-element":21,"./update-widget":25}],24:[function(require,module,exports){
 var document = require("global/document")
 var isArray = require("x-is-array")
 
@@ -1350,7 +1348,7 @@ function patchIndices(patches) {
     return indices
 }
 
-},{"./dom-index":"/Users/joshuachisholm/projects/todomvc/examples/plastiq/node_modules/plastiq/node_modules/virtual-dom/vdom/dom-index.js","./patch-op":"/Users/joshuachisholm/projects/todomvc/examples/plastiq/node_modules/plastiq/node_modules/virtual-dom/vdom/patch-op.js","global/document":"/Users/joshuachisholm/projects/todomvc/examples/plastiq/node_modules/plastiq/node_modules/virtual-dom/node_modules/global/document.js","x-is-array":"/Users/joshuachisholm/projects/todomvc/examples/plastiq/node_modules/plastiq/node_modules/virtual-dom/node_modules/x-is-array/index.js"}],"/Users/joshuachisholm/projects/todomvc/examples/plastiq/node_modules/plastiq/node_modules/virtual-dom/vdom/update-widget.js":[function(require,module,exports){
+},{"./dom-index":22,"./patch-op":23,"global/document":16,"x-is-array":18}],25:[function(require,module,exports){
 var isWidget = require("../vnode/is-widget.js")
 
 module.exports = updateWidget
@@ -1367,7 +1365,7 @@ function updateWidget(a, b) {
     return false
 }
 
-},{"../vnode/is-widget.js":"/Users/joshuachisholm/projects/todomvc/examples/plastiq/node_modules/plastiq/node_modules/virtual-dom/vnode/is-widget.js"}],"/Users/joshuachisholm/projects/todomvc/examples/plastiq/node_modules/plastiq/node_modules/virtual-dom/virtual-hyperscript/hooks/data-set-hook.js":[function(require,module,exports){
+},{"../vnode/is-widget.js":36}],26:[function(require,module,exports){
 var DataSet = require("data-set")
 
 module.exports = DataSetHook;
@@ -1387,7 +1385,7 @@ DataSetHook.prototype.hook = function (node, propertyName) {
     ds[propName] = this.value;
 };
 
-},{"data-set":"/Users/joshuachisholm/projects/todomvc/examples/plastiq/node_modules/plastiq/node_modules/virtual-dom/node_modules/data-set/index.js"}],"/Users/joshuachisholm/projects/todomvc/examples/plastiq/node_modules/plastiq/node_modules/virtual-dom/virtual-hyperscript/hooks/ev-hook.js":[function(require,module,exports){
+},{"data-set":8}],27:[function(require,module,exports){
 var DataSet = require("data-set")
 
 module.exports = DataSetHook;
@@ -1414,7 +1412,7 @@ DataSetHook.prototype.unhook = function(node, propertyName) {
     ds[propName] = undefined;
 }
 
-},{"data-set":"/Users/joshuachisholm/projects/todomvc/examples/plastiq/node_modules/plastiq/node_modules/virtual-dom/node_modules/data-set/index.js"}],"/Users/joshuachisholm/projects/todomvc/examples/plastiq/node_modules/plastiq/node_modules/virtual-dom/virtual-hyperscript/hooks/soft-set-hook.js":[function(require,module,exports){
+},{"data-set":8}],28:[function(require,module,exports){
 module.exports = SoftSetHook;
 
 function SoftSetHook(value) {
@@ -1431,7 +1429,7 @@ SoftSetHook.prototype.hook = function (node, propertyName) {
     }
 };
 
-},{}],"/Users/joshuachisholm/projects/todomvc/examples/plastiq/node_modules/plastiq/node_modules/virtual-dom/virtual-hyperscript/index.js":[function(require,module,exports){
+},{}],29:[function(require,module,exports){
 var TypedError = require("error/typed")
 
 var VNode = require("../vnode/vnode.js")
@@ -1560,7 +1558,7 @@ function isChildren(x) {
     return typeof x === "string" || Array.isArray(x) || isChild(x)
 }
 
-},{"../vnode/is-thunk":"/Users/joshuachisholm/projects/todomvc/examples/plastiq/node_modules/plastiq/node_modules/virtual-dom/vnode/is-thunk.js","../vnode/is-vhook":"/Users/joshuachisholm/projects/todomvc/examples/plastiq/node_modules/plastiq/node_modules/virtual-dom/vnode/is-vhook.js","../vnode/is-vnode":"/Users/joshuachisholm/projects/todomvc/examples/plastiq/node_modules/plastiq/node_modules/virtual-dom/vnode/is-vnode.js","../vnode/is-vtext":"/Users/joshuachisholm/projects/todomvc/examples/plastiq/node_modules/plastiq/node_modules/virtual-dom/vnode/is-vtext.js","../vnode/is-widget":"/Users/joshuachisholm/projects/todomvc/examples/plastiq/node_modules/plastiq/node_modules/virtual-dom/vnode/is-widget.js","../vnode/vnode.js":"/Users/joshuachisholm/projects/todomvc/examples/plastiq/node_modules/plastiq/node_modules/virtual-dom/vnode/vnode.js","../vnode/vtext.js":"/Users/joshuachisholm/projects/todomvc/examples/plastiq/node_modules/plastiq/node_modules/virtual-dom/vnode/vtext.js","./hooks/data-set-hook.js":"/Users/joshuachisholm/projects/todomvc/examples/plastiq/node_modules/plastiq/node_modules/virtual-dom/virtual-hyperscript/hooks/data-set-hook.js","./hooks/ev-hook.js":"/Users/joshuachisholm/projects/todomvc/examples/plastiq/node_modules/plastiq/node_modules/virtual-dom/virtual-hyperscript/hooks/ev-hook.js","./hooks/soft-set-hook.js":"/Users/joshuachisholm/projects/todomvc/examples/plastiq/node_modules/plastiq/node_modules/virtual-dom/virtual-hyperscript/hooks/soft-set-hook.js","./parse-tag.js":"/Users/joshuachisholm/projects/todomvc/examples/plastiq/node_modules/plastiq/node_modules/virtual-dom/virtual-hyperscript/parse-tag.js","error/typed":"/Users/joshuachisholm/projects/todomvc/examples/plastiq/node_modules/plastiq/node_modules/virtual-dom/node_modules/error/typed.js"}],"/Users/joshuachisholm/projects/todomvc/examples/plastiq/node_modules/plastiq/node_modules/virtual-dom/virtual-hyperscript/parse-tag.js":[function(require,module,exports){
+},{"../vnode/is-thunk":32,"../vnode/is-vhook":33,"../vnode/is-vnode":34,"../vnode/is-vtext":35,"../vnode/is-widget":36,"../vnode/vnode.js":38,"../vnode/vtext.js":40,"./hooks/data-set-hook.js":26,"./hooks/ev-hook.js":27,"./hooks/soft-set-hook.js":28,"./parse-tag.js":30,"error/typed":15}],30:[function(require,module,exports){
 var classIdSplit = /([\.#]?[a-zA-Z0-9_:-]+)/
 var notClassId = /^\.|#/
 
@@ -1611,7 +1609,7 @@ function parseTag(tag, props) {
     return tagName ? tagName.toLowerCase() : "div"
 }
 
-},{}],"/Users/joshuachisholm/projects/todomvc/examples/plastiq/node_modules/plastiq/node_modules/virtual-dom/vnode/handle-thunk.js":[function(require,module,exports){
+},{}],31:[function(require,module,exports){
 var isVNode = require("./is-vnode")
 var isVText = require("./is-vtext")
 var isWidget = require("./is-widget")
@@ -1653,14 +1651,14 @@ function renderThunk(thunk, previous) {
     return renderedThunk
 }
 
-},{"./is-thunk":"/Users/joshuachisholm/projects/todomvc/examples/plastiq/node_modules/plastiq/node_modules/virtual-dom/vnode/is-thunk.js","./is-vnode":"/Users/joshuachisholm/projects/todomvc/examples/plastiq/node_modules/plastiq/node_modules/virtual-dom/vnode/is-vnode.js","./is-vtext":"/Users/joshuachisholm/projects/todomvc/examples/plastiq/node_modules/plastiq/node_modules/virtual-dom/vnode/is-vtext.js","./is-widget":"/Users/joshuachisholm/projects/todomvc/examples/plastiq/node_modules/plastiq/node_modules/virtual-dom/vnode/is-widget.js"}],"/Users/joshuachisholm/projects/todomvc/examples/plastiq/node_modules/plastiq/node_modules/virtual-dom/vnode/is-thunk.js":[function(require,module,exports){
+},{"./is-thunk":32,"./is-vnode":34,"./is-vtext":35,"./is-widget":36}],32:[function(require,module,exports){
 module.exports = isThunk
 
 function isThunk(t) {
     return t && t.type === "Thunk"
 }
 
-},{}],"/Users/joshuachisholm/projects/todomvc/examples/plastiq/node_modules/plastiq/node_modules/virtual-dom/vnode/is-vhook.js":[function(require,module,exports){
+},{}],33:[function(require,module,exports){
 module.exports = isHook
 
 function isHook(hook) {
@@ -1668,7 +1666,7 @@ function isHook(hook) {
         !hook.hasOwnProperty("hook")
 }
 
-},{}],"/Users/joshuachisholm/projects/todomvc/examples/plastiq/node_modules/plastiq/node_modules/virtual-dom/vnode/is-vnode.js":[function(require,module,exports){
+},{}],34:[function(require,module,exports){
 var version = require("./version")
 
 module.exports = isVirtualNode
@@ -1677,7 +1675,7 @@ function isVirtualNode(x) {
     return x && x.type === "VirtualNode" && x.version === version
 }
 
-},{"./version":"/Users/joshuachisholm/projects/todomvc/examples/plastiq/node_modules/plastiq/node_modules/virtual-dom/vnode/version.js"}],"/Users/joshuachisholm/projects/todomvc/examples/plastiq/node_modules/plastiq/node_modules/virtual-dom/vnode/is-vtext.js":[function(require,module,exports){
+},{"./version":37}],35:[function(require,module,exports){
 var version = require("./version")
 
 module.exports = isVirtualText
@@ -1686,17 +1684,17 @@ function isVirtualText(x) {
     return x && x.type === "VirtualText" && x.version === version
 }
 
-},{"./version":"/Users/joshuachisholm/projects/todomvc/examples/plastiq/node_modules/plastiq/node_modules/virtual-dom/vnode/version.js"}],"/Users/joshuachisholm/projects/todomvc/examples/plastiq/node_modules/plastiq/node_modules/virtual-dom/vnode/is-widget.js":[function(require,module,exports){
+},{"./version":37}],36:[function(require,module,exports){
 module.exports = isWidget
 
 function isWidget(w) {
     return w && w.type === "Widget"
 }
 
-},{}],"/Users/joshuachisholm/projects/todomvc/examples/plastiq/node_modules/plastiq/node_modules/virtual-dom/vnode/version.js":[function(require,module,exports){
+},{}],37:[function(require,module,exports){
 module.exports = "1"
 
-},{}],"/Users/joshuachisholm/projects/todomvc/examples/plastiq/node_modules/plastiq/node_modules/virtual-dom/vnode/vnode.js":[function(require,module,exports){
+},{}],38:[function(require,module,exports){
 var version = require("./version")
 var isVNode = require("./is-vnode")
 var isWidget = require("./is-widget")
@@ -1770,7 +1768,7 @@ function VirtualNode(tagName, properties, children, key, namespace) {
 VirtualNode.prototype.version = version
 VirtualNode.prototype.type = "VirtualNode"
 
-},{"./is-thunk":"/Users/joshuachisholm/projects/todomvc/examples/plastiq/node_modules/plastiq/node_modules/virtual-dom/vnode/is-thunk.js","./is-vhook":"/Users/joshuachisholm/projects/todomvc/examples/plastiq/node_modules/plastiq/node_modules/virtual-dom/vnode/is-vhook.js","./is-vnode":"/Users/joshuachisholm/projects/todomvc/examples/plastiq/node_modules/plastiq/node_modules/virtual-dom/vnode/is-vnode.js","./is-widget":"/Users/joshuachisholm/projects/todomvc/examples/plastiq/node_modules/plastiq/node_modules/virtual-dom/vnode/is-widget.js","./version":"/Users/joshuachisholm/projects/todomvc/examples/plastiq/node_modules/plastiq/node_modules/virtual-dom/vnode/version.js"}],"/Users/joshuachisholm/projects/todomvc/examples/plastiq/node_modules/plastiq/node_modules/virtual-dom/vnode/vpatch.js":[function(require,module,exports){
+},{"./is-thunk":32,"./is-vhook":33,"./is-vnode":34,"./is-widget":36,"./version":37}],39:[function(require,module,exports){
 var version = require("./version")
 
 VirtualPatch.NONE = 0
@@ -1794,7 +1792,7 @@ function VirtualPatch(type, vNode, patch) {
 VirtualPatch.prototype.version = version
 VirtualPatch.prototype.type = "VirtualPatch"
 
-},{"./version":"/Users/joshuachisholm/projects/todomvc/examples/plastiq/node_modules/plastiq/node_modules/virtual-dom/vnode/version.js"}],"/Users/joshuachisholm/projects/todomvc/examples/plastiq/node_modules/plastiq/node_modules/virtual-dom/vnode/vtext.js":[function(require,module,exports){
+},{"./version":37}],40:[function(require,module,exports){
 var version = require("./version")
 
 module.exports = VirtualText
@@ -1806,7 +1804,7 @@ function VirtualText(text) {
 VirtualText.prototype.version = version
 VirtualText.prototype.type = "VirtualText"
 
-},{"./version":"/Users/joshuachisholm/projects/todomvc/examples/plastiq/node_modules/plastiq/node_modules/virtual-dom/vnode/version.js"}],"/Users/joshuachisholm/projects/todomvc/examples/plastiq/node_modules/plastiq/node_modules/virtual-dom/vtree/diff.js":[function(require,module,exports){
+},{"./version":37}],41:[function(require,module,exports){
 var isArray = require("x-is-array")
 var isObject = require("is-object")
 
@@ -2184,6 +2182,4 @@ function appendPatch(apply, patch) {
     }
 }
 
-},{"../vnode/handle-thunk":"/Users/joshuachisholm/projects/todomvc/examples/plastiq/node_modules/plastiq/node_modules/virtual-dom/vnode/handle-thunk.js","../vnode/is-thunk":"/Users/joshuachisholm/projects/todomvc/examples/plastiq/node_modules/plastiq/node_modules/virtual-dom/vnode/is-thunk.js","../vnode/is-vhook":"/Users/joshuachisholm/projects/todomvc/examples/plastiq/node_modules/plastiq/node_modules/virtual-dom/vnode/is-vhook.js","../vnode/is-vnode":"/Users/joshuachisholm/projects/todomvc/examples/plastiq/node_modules/plastiq/node_modules/virtual-dom/vnode/is-vnode.js","../vnode/is-vtext":"/Users/joshuachisholm/projects/todomvc/examples/plastiq/node_modules/plastiq/node_modules/virtual-dom/vnode/is-vtext.js","../vnode/is-widget":"/Users/joshuachisholm/projects/todomvc/examples/plastiq/node_modules/plastiq/node_modules/virtual-dom/vnode/is-widget.js","../vnode/vpatch":"/Users/joshuachisholm/projects/todomvc/examples/plastiq/node_modules/plastiq/node_modules/virtual-dom/vnode/vpatch.js","is-object":"/Users/joshuachisholm/projects/todomvc/examples/plastiq/node_modules/plastiq/node_modules/virtual-dom/node_modules/is-object/index.js","x-is-array":"/Users/joshuachisholm/projects/todomvc/examples/plastiq/node_modules/plastiq/node_modules/virtual-dom/node_modules/x-is-array/index.js"}],"/Users/joshuachisholm/projects/todomvc/examples/plastiq/node_modules/watchify/node_modules/browserify/node_modules/browser-resolve/empty.js":[function(require,module,exports){
-
-},{}]},{},["/Users/joshuachisholm/projects/todomvc/examples/plastiq/app.pogo"]);
+},{"../vnode/handle-thunk":31,"../vnode/is-thunk":32,"../vnode/is-vhook":33,"../vnode/is-vnode":34,"../vnode/is-vtext":35,"../vnode/is-widget":36,"../vnode/vpatch":39,"is-object":17,"x-is-array":18}]},{},[1]);

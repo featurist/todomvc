@@ -40,8 +40,8 @@ todoItem (todo, model) =
   editing = (model.editing == todo)
   h 'li' { class = { completed = todo.completed, editing = editing } } (
     h 'div.view' (
-      h 'input.toggle'   { type = 'checkbox', binding = bind(todo, 'completed') }
-      h 'label'          { ondblclick () = model.editing = todo } (todo.title)
+      h 'input.toggle' { type = 'checkbox', binding = bind(todo, 'completed') }
+      h 'label' { ondblclick () = model.editing = todo } (todo.title)
       h 'button.destroy' { onclick () = model.destroyTodo (todo) }
     )
     h 'input.edit' {
@@ -88,11 +88,7 @@ info () =
     h 'p' 'Double-click to edit a todo'
     h 'p' (
       'Created by '
-      h 'a' { href = 'https://github.com/joshski' } '@joshski'
-      ' with '
-      h 'a' { href = 'https://github.com/featurist/plastiq' } 'plastiq'
-      ' and '
-      h 'a' { href = 'https://github.com/featurist/pogoscript' } 'pogo'
+      h 'a' { href = 'https://github.com/joshski' } 'Josh Chisholm'
     )
     h 'p' (
       'Part of '

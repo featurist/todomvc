@@ -1,6 +1,6 @@
 # Plastiq TodoMVC Example
 
-> Plastiq is a tiny framework for single page apps based on virtual-dom.
+> Plastiq is a tiny framework for single page apps based on [virtual-dom](https://github.com/Matt-Esch/virtual-dom).
 
 
 ## Learning Plastiq
@@ -11,8 +11,8 @@ start.
 
 ## Implementation
 
-The implementation is quick and dirty: one [Pogoscript](http://pogoscript.org)
-file, [app.pogo](app.pogo). The code should be self-explanatory.
+The implementation is just one [Pogoscript](http://pogoscript.org) file,
+[app.pogo](app.pogo).
 
 
 ## Running
@@ -29,4 +29,4 @@ npm run watch
 
 ## Credit
 
-This TodoMVC application was created by [@joshski](https://github.com/joshski).
+This TodoMVC application was created by [Josh Chisholm](https://github.com/joshski).
