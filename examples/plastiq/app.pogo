@@ -2,74 +2,62 @@ plastiq = require 'plastiq'
 h = plastiq.html
 bind = plastiq.bind
 
-render (state) =
+render (model) =
   h 'section#plastiq-todomvc' (
     h 'section#todoapp' (
-      header (state)
-      main (state)
-      footer (state)
+      header (model)
+      main   (model)
+      footer (model)
     )
-    info (state)
+    info ()
   )
 
-header (state) =
+header (model) =
   h 'header#header' (
     h 'h1' 'todos'
     h 'input#new-todo' {
-      placeholder = "What needs to be done?"
-      autofocus = true
-      binding = bind(state, 'title')
-      onkeyup (e) = if (isEnterKey (e)) @{ state.createTodo() }
+      placeholder = 'What needs to be done?'
+      autofocus   = true
+      binding     = bind(model, 'title')
+      onkeyup (e) = if (isEnterKey (e)) @{ model.createTodo() }
     }
   )
 
-main (state) =
-  if (state.todos.length > 0)
+main (model) =
+  if (model.todos.length > 0)
     h 'section#main' (
       h 'input#toggle-all' {
-        type = 'checkbox'
-        checked = state.allCompleted()
-        onclick () = state.toggleAll()
+        type       = 'checkbox'
+        checked    = model.allCompleted()
+        onclick () = model.toggleAll()
       }
-      h 'label' { htmlFor = 'toggle-all' } 'Mark all as complete'
-      h 'ul#todo-list' (
-        state.todos.map @(todo)
-          todoItem (todo, state)
-      )
+      h "label" { htmlFor = 'toggle-all' } 'Mark all as complete'
+      h 'ul#todo-list' [t <- model.todos, todoItem (t, model)]
     )
 
-todoItem (todo, state) =
-  h 'li' { className = todoClass(todo) } (
+todoItem (todo, model) =
+  h 'li' { className = { completed = todo.completed, editing = todo.editing } } (
     h 'div.view' (
-      h 'input.toggle' { type = 'checkbox', binding = bind(todo, 'completed') }
-      h 'label' { ondblclick () = (todo.editing = true) } (todo.title)
-      h 'button.destroy' { onclick () = state.destroyTodo (todo) }
+      h 'input.toggle'   { type = 'checkbox', binding = bind(todo, 'completed') }
+      h 'label'          { ondblclick () = (todo.editing = true) } (todo.title)
+      h 'button.destroy' { onclick () = model.destroyTodo (todo) }
     )
     h 'input.edit' {
-      binding = bind(todo, 'title')
-      onkeyup (e) =
-        if (isEnterKey(e))
-          todo.editing = false
+      binding     = bind(todo, 'title')
+      onkeyup (e) = (todo.editing = @not isEnterKey(e))
     }
   )
 
-todoClass(todo) =
-  classes = []
-  if (todo.completed) @{ classes.push 'completed' }
-  if (todo.editing) @{ classes.push 'editing' }
-  classes.join(' ')
-
-footer (state) =
+footer (model) =
   h 'footer#footer' (
     h 'span#todo-count' (
-      h 'strong' (state.todos.length)
-      if (state.todos.length == 1) @{ ' item' } else @{ ' items' }
-      ' left'
+      h 'strong' (model.todos.length)
+      if (model.todos.length == 1) @{ ' item left' } else @{ ' items left' }
     )
-    h 'button#clear-completed' {
-      disabled = (state.countCompleted() == 0)
-      onclick () = state.clearCompleted()
-    } "Clear completed (#(state.countCompleted()))"
+    if (model.countCompleted() > 0)
+      h 'button#clear-completed' { onclick () = model.clearCompleted() } (
+        "Clear completed (#(model.countCompleted()))"
+      )
   )
 
 info () =
@@ -93,17 +81,15 @@ model = {
 
   createTodo () =
     if (self.title != '')
-      todo = { title = self.title, completed = false }
+      self.todos.push { title = self.title, completed = false }
       self.title = ''
-      self.todos.push(todo)
 
   destroyTodo (todo) =
-    self.todos.splice(self.todos.indexOf(todo), 1)
+    self.todos.splice (self.todos.indexOf(todo), 1)
 
   toggleAll () =
-    completed = @not self.allCompleted()
-    self.todos.forEach @(todo)
-      todo.completed = completed
+    completed = @not self.allCompleted ()
+    [ t <- self.todos, t.completed = completed ]
 
   countCompleted () =
     [ t <- self.todos, t.completed, t ].length
@@ -111,8 +97,8 @@ model = {
   allCompleted () =
     self.countCompleted () == self.todos.length
 
-  clearCompleted() =
-    [ t <- self.todos, t.completed, self.destroyTodo(t) ]
+  clearCompleted () =
+    [ t <- [].concat (self.todos), t.completed, self.destroyTodo (t) ]
 }
 
 plastiq.attach (document.body, render, model)

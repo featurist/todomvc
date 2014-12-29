@@ -1,45 +1,57 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({"/Users/joshuachisholm/projects/todomvc/examples/plastiq/app.pogo":[function(require,module,exports){
 (function() {
     var self = this;
-    var plastiq, h, bind, render, header, main, todoItem, todoClass, footer, info, isEnterKey, model;
+    var plastiq, h, bind, render, header, main, todoItem, footer, info, isEnterKey, model;
     plastiq = require("plastiq");
     h = plastiq.html;
     bind = plastiq.bind;
-    render = function(state) {
-        return h("section#plastiq-todomvc", h("section#todoapp", header(state), main(state), footer(state)), info(state));
+    render = function(model) {
+        return h("section#plastiq-todomvc", h("section#todoapp", header(model), main(model), footer(model)), info());
     };
-    header = function(state) {
+    header = function(model) {
         return h("header#header", h("h1", "todos"), h("input#new-todo", {
             placeholder: "What needs to be done?",
             autofocus: true,
-            binding: bind(state, "title"),
+            binding: bind(model, "title"),
             onkeyup: function(e) {
                 var self = this;
                 if (isEnterKey(e)) {
-                    return state.createTodo();
+                    return model.createTodo();
                 }
             }
         }));
     };
-    main = function(state) {
-        if (state.todos.length > 0) {
+    main = function(model) {
+        if (model.todos.length > 0) {
             return h("section#main", h("input#toggle-all", {
                 type: "checkbox",
-                checked: state.allCompleted(),
+                checked: model.allCompleted(),
                 onclick: function() {
                     var self = this;
-                    return state.toggleAll();
+                    return model.toggleAll();
                 }
             }), h("label", {
                 htmlFor: "toggle-all"
-            }, "Mark all as complete"), h("ul#todo-list", state.todos.map(function(todo) {
-                return todoItem(todo, state);
-            })));
+            }, "Mark all as complete"), h("ul#todo-list", function() {
+                var gen1_results, gen2_items, gen3_i, t;
+                gen1_results = [];
+                gen2_items = model.todos;
+                for (gen3_i = 0; gen3_i < gen2_items.length; ++gen3_i) {
+                    t = gen2_items[gen3_i];
+                    (function(t) {
+                        return gen1_results.push(todoItem(t, model));
+                    })(t);
+                }
+                return gen1_results;
+            }()));
         }
     };
-    todoItem = function(todo, state) {
+    todoItem = function(todo, model) {
         return h("li", {
-            className: todoClass(todo)
+            className: {
+                completed: todo.completed,
+                editing: todo.editing
+            }
         }, h("div.view", h("input.toggle", {
             type: "checkbox",
             binding: bind(todo, "completed")
@@ -51,43 +63,33 @@
         }, todo.title), h("button.destroy", {
             onclick: function() {
                 var self = this;
-                return state.destroyTodo(todo);
+                return model.destroyTodo(todo);
             }
         })), h("input.edit", {
             binding: bind(todo, "title"),
             onkeyup: function(e) {
                 var self = this;
-                if (isEnterKey(e)) {
-                    return todo.editing = false;
-                }
+                return todo.editing = !isEnterKey(e);
             }
         }));
     };
-    todoClass = function(todo) {
-        var classes;
-        classes = [];
-        if (todo.completed) {
-            classes.push("completed");
-        }
-        if (todo.editing) {
-            classes.push("editing");
-        }
-        return classes.join(" ");
-    };
-    footer = function(state) {
-        return h("footer#footer", h("span#todo-count", h("strong", state.todos.length), function() {
-            if (state.todos.length === 1) {
-                return " item";
+    footer = function(model) {
+        return h("footer#footer", h("span#todo-count", h("strong", model.todos.length), function() {
+            if (model.todos.length === 1) {
+                return " item left";
             } else {
-                return " items";
+                return " items left";
             }
-        }(), " left"), h("button#clear-completed", {
-            disabled: state.countCompleted() === 0,
-            onclick: function() {
-                var self = this;
-                return state.clearCompleted();
+        }()), function() {
+            if (model.countCompleted() > 0) {
+                return h("button#clear-completed", {
+                    onclick: function() {
+                        var self = this;
+                        return model.clearCompleted();
+                    }
+                }, "Clear completed (" + model.countCompleted() + ")");
             }
-        }, "Clear completed (" + state.countCompleted() + ")"));
+        }());
     };
     info = function() {
         return h("footer#info", h("p", "Double-click to edit a todo"), h("p", "Created with ", h("a", {
@@ -104,14 +106,12 @@
         todos: [],
         createTodo: function() {
             var self = this;
-            var todo;
             if (self.title !== "") {
-                todo = {
+                self.todos.push({
                     title: self.title,
                     completed: false
-                };
-                self.title = "";
-                return self.todos.push(todo);
+                });
+                return self.title = "";
             }
         },
         destroyTodo: function(todo) {
@@ -122,25 +122,34 @@
             var self = this;
             var completed;
             completed = !self.allCompleted();
-            return self.todos.forEach(function(todo) {
-                return todo.completed = completed;
-            });
+            return function() {
+                var gen4_results, gen5_items, gen6_i, t;
+                gen4_results = [];
+                gen5_items = self.todos;
+                for (gen6_i = 0; gen6_i < gen5_items.length; ++gen6_i) {
+                    t = gen5_items[gen6_i];
+                    (function(t) {
+                        return gen4_results.push(t.completed = completed);
+                    })(t);
+                }
+                return gen4_results;
+            }();
         },
         countCompleted: function() {
             var self = this;
             return function() {
-                var gen1_results, gen2_items, gen3_i, t;
-                gen1_results = [];
-                gen2_items = self.todos;
-                for (gen3_i = 0; gen3_i < gen2_items.length; ++gen3_i) {
-                    t = gen2_items[gen3_i];
+                var gen7_results, gen8_items, gen9_i, t;
+                gen7_results = [];
+                gen8_items = self.todos;
+                for (gen9_i = 0; gen9_i < gen8_items.length; ++gen9_i) {
+                    t = gen8_items[gen9_i];
                     (function(t) {
                         if (t.completed) {
-                            return gen1_results.push(t);
+                            return gen7_results.push(t);
                         }
                     })(t);
                 }
-                return gen1_results;
+                return gen7_results;
             }().length;
         },
         allCompleted: function() {
@@ -150,18 +159,18 @@
         clearCompleted: function() {
             var self = this;
             return function() {
-                var gen4_results, gen5_items, gen6_i, t;
-                gen4_results = [];
-                gen5_items = self.todos;
-                for (gen6_i = 0; gen6_i < gen5_items.length; ++gen6_i) {
-                    t = gen5_items[gen6_i];
+                var gen10_results, gen11_items, gen12_i, t;
+                gen10_results = [];
+                gen11_items = [].concat(self.todos);
+                for (gen12_i = 0; gen12_i < gen11_items.length; ++gen12_i) {
+                    t = gen11_items[gen12_i];
                     (function(t) {
                         if (t.completed) {
-                            return gen4_results.push(self.destroyTodo(t));
+                            return gen10_results.push(self.destroyTodo(t));
                         }
                     })(t);
                 }
-                return gen4_results;
+                return gen10_results;
             }();
         }
     };
