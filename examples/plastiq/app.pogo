@@ -32,13 +32,13 @@ main (model) =
         checked    = model.allCompleted()
         onclick () = model.toggleAll()
       }
-      h "label" { htmlFor = 'toggle-all' } 'Mark all as complete'
+      h "label" { for = 'toggle-all' } 'Mark all as complete'
       h 'ul#todo-list' [t <- todos, todoItem (t, model)]
     )
 
 todoItem (todo, model) =
   editing = (model.editing == todo)
-  h 'li' { className = { completed = todo.completed, editing = editing } } (
+  h 'li' { class = { completed = todo.completed, editing = editing } } (
     h 'div.view' (
       h 'input.toggle'   { type = 'checkbox', binding = bind(todo, 'completed') }
       h 'label'          { ondblclick () = model.editing = todo } (todo.title)
@@ -76,7 +76,7 @@ filter (model, name) =
   h 'li' (
     h 'a' {
       href = "##(name)"
-      className = { selected = (model.filter == name) }
+      class = { selected = (model.filter == name) }
       onclick (e) =
         e.preventDefault ()
         model.filter = name
@@ -91,6 +91,8 @@ info () =
       h 'a' { href = 'https://github.com/joshski' } '@joshski'
       ' with '
       h 'a' { href = 'https://github.com/featurist/plastiq' } 'plastiq'
+      ' and '
+      h 'a' { href = 'https://github.com/featurist/pogoscript' } 'pogo'
     )
     h 'p' (
       'Part of '
