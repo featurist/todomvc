@@ -18,7 +18,7 @@ header (state) =
     h 'input#new-todo' {
       placeholder = "What needs to be done?"
       autofocus = true
-      model = bind(state, 'title')
+      binding = bind(state, 'title')
       onkeyup (e) = if (isEnterKey (e)) @{ state.createTodo() }
     }
   )
@@ -41,12 +41,12 @@ main (state) =
 todoItem (todo, state) =
   h 'li' { className = todoClass(todo) } (
     h 'div.view' (
-      h 'input.toggle' { type = 'checkbox', model = bind(todo, 'completed') }
+      h 'input.toggle' { type = 'checkbox', binding = bind(todo, 'completed') }
       h 'label' { ondblclick () = (todo.editing = true) } (todo.title)
       h 'button.destroy' { onclick () = state.destroyTodo (todo) }
     )
     h 'input.edit' {
-      model = bind(todo, 'title')
+      binding = bind(todo, 'title')
       onkeyup (e) =
         if (isEnterKey(e))
           todo.editing = false

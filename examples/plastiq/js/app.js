@@ -12,7 +12,7 @@
         return h("header#header", h("h1", "todos"), h("input#new-todo", {
             placeholder: "What needs to be done?",
             autofocus: true,
-            model: bind(state, "title"),
+            binding: bind(state, "title"),
             onkeyup: function(e) {
                 var self = this;
                 if (isEnterKey(e)) {
@@ -42,7 +42,7 @@
             className: todoClass(todo)
         }, h("div.view", h("input.toggle", {
             type: "checkbox",
-            model: bind(todo, "completed")
+            binding: bind(todo, "completed")
         }), h("label", {
             ondblclick: function() {
                 var self = this;
@@ -54,7 +54,7 @@
                 return state.destroyTodo(todo);
             }
         })), h("input.edit", {
-            model: bind(todo, "title"),
+            binding: bind(todo, "title"),
             onkeyup: function(e) {
                 var self = this;
                 if (isEnterKey(e)) {
@@ -188,12 +188,22 @@ function renderWithRefresh(render, model, refresh) {
   return tree;
 }
 
-exports.attach = function (element, render, model) {
+exports.attach = function (element, render, model, options) {
+  var requestRender = (options && options.requestRender) || window.requestAnimationFrame || setTimeout;
+  var requested = false;
+
   function refresh() {
-    var newTree = renderWithRefresh(render, model, refresh);
-    var patches = diff(tree, newTree);
-    rootNode = patch(rootNode, patches);
-    tree = newTree;
+    if (!requested) {
+      requestRender(function () {
+        requested = false;
+
+        var newTree = renderWithRefresh(render, model, refresh);
+        var patches = diff(tree, newTree);
+        rootNode = patch(rootNode, patches);
+        tree = newTree;
+      });
+      requested = true;
+    }
   }
 
   var tree = renderWithRefresh(render, model, refresh);
@@ -202,11 +212,12 @@ exports.attach = function (element, render, model) {
 };
 
 exports.bind = function (obj, prop) {
-  return function (arg) {
-    if (arg === undefined) {
+  return {
+    get: function () {
       return obj[prop];
-    } else {
-      obj[prop] = arg;
+    },
+    set: function (value) {
+      obj[prop] = value;
     }
   };
 };
@@ -232,29 +243,45 @@ function bindTextInput(attributes, children, get, set) {
 
   attributes.value = get();
 
-  listenToEvents(attributes, textEventNames, function (ev) {
+  attachEventHandler(attributes, textEventNames, function (ev) {
     set(ev.target.value);
   });
 }
 
-function listenToEvents(attributes, eventNames, handler) {
-  if (eventNames instanceof Array) {
-    eventNames.forEach(function (eventName) {
-      attributes[eventName] = handler;
-    });
+function sequenceFunctions(handler1, handler2) {
+  return function (ev) {
+    handler1(ev);
+    return handler2(ev);
+  };
+}
+
+function insertEventHandler(attributes, eventName, handler) {
+  var previousHandler = attributes[eventName];
+  if (previousHandler) {
+    attributes[eventName] = sequenceFunctions(handler, previousHandler);
   } else {
-    attributes[eventNames] = handler;
+    attributes[eventName] = handler;
   }
 }
 
-function bindValue(attributes, children, type) {
+function attachEventHandler(attributes, eventNames, handler) {
+  if (eventNames instanceof Array) {
+    eventNames.forEach(function (eventName) {
+      insertEventHandler(attributes, eventName, handler);
+    });
+  } else {
+    insertEventHandler(attributes, eventNames, handler);
+  }
+}
+
+function bindModel(attributes, children, type) {
   var inputTypeBindings = {
     text: bindTextInput,
     textarea: bindTextInput,
     checkbox: function (attributes, children, get, set) {
       attributes.checked = get();
 
-      listenToEvents(attributes, 'onclick', function (ev) {
+      attachEventHandler(attributes, 'onclick', function (ev) {
         set(ev.target.checked);
       });
     },
@@ -262,9 +289,9 @@ function bindValue(attributes, children, type) {
       var value = attributes.value;
       attributes.checked = get() == attributes.value;
 
-      attributes.onclick = function (ev) {
+      attachEventHandler(attributes, 'onclick', function (ev) {
         set(value);
-      };
+      });
     },
     select: function (attributes, children, get, set) {
       var currentValue = get();
@@ -286,26 +313,26 @@ function bindValue(attributes, children, type) {
         option.properties.value = index;
       });
 
-      attributes.onchange = function (ev) {
+      attachEventHandler(attributes, 'onchange', function (ev) {
         set(values[ev.target.value]);
-      };
+      });
     },
     file: function (attributes, children, get, set) {
       var multiple = attributes.multiple;
 
-      attributes.onchange = function (ev) {
+      attachEventHandler(attributes, 'onchange', function (ev) {
         if (multiple) {
           set(ev.target.files);
         } else {
           set(ev.target.files[0]);
         }
-      };
+      });
     }
   };
 
   var binding = inputTypeBindings[type] || bindTextInput;
 
-  binding(attributes, children, attributes.model, refreshFunction(attributes.model));
+  binding(attributes, children, attributes.binding.get, refreshFunction(attributes.binding.set));
 }
 
 function inputType(selector, properties) {
@@ -360,18 +387,36 @@ exports.html = function (selector) {
 
     Object.keys(properties).forEach(function (key) {
       if (typeof(properties[key]) == 'function') {
-        if (key == 'model') {
-          bindValue(properties, childElements, inputType(selector, properties));
-        } else {
-          properties[key] = refreshFunction(properties[key]);
-        }
+        properties[key] = refreshFunction(properties[key]);
       }
     });
+
+    if (properties.className) {
+      properties.className = generateClassName(properties.className);
+    }
+
+    if (properties.binding) {
+      bindModel(properties, childElements, inputType(selector, properties));
+    }
 
     return h.call(undefined, selector, properties, childElements);
   } else {
     childElements = normaliseChildren(flatten(Array.prototype.slice.call(arguments, 1)));
     return h.call(undefined, selector, childElements);
+  }
+};
+
+function generateClassName(obj) {
+  if (typeof(obj) == 'object') {
+    if (obj instanceof Array) {
+      return obj.join(' ');
+    } else {
+      return Object.keys(obj).filter(function (key) {
+        return obj[key];
+      }).join(' ');
+    }
+  } else {
+    return obj;
   }
 };
 
