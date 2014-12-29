@@ -32,7 +32,7 @@ main (model) =
         onclick () = model.toggleAll()
       }
       h "label" { htmlFor = 'toggle-all' } 'Mark all as complete'
-      h 'ul#todo-list' [t <- model.todos, todoItem (t, model)]
+      h 'ul#todo-list' [t <- model.filteredTodos(), todoItem (t, model)]
     )
 
 todoItem (todo, model) =
@@ -54,10 +54,26 @@ footer (model) =
       h 'strong' (model.todos.length)
       if (model.todos.length == 1) @{ ' item left' } else @{ ' items left' }
     )
-    if (model.countCompleted() > 0)
-      h 'button#clear-completed' { onclick () = model.clearCompleted() } (
+    h 'ul#filters' (
+      filter (model, 'All')
+      filter (model, 'Active')
+      filter (model, 'Completed')
+    )
+    if (model.countCompleted () > 0)
+      h 'button#clear-completed' { onclick () = model.clearCompleted () } (
         "Clear completed (#(model.countCompleted()))"
       )
+  )
+
+filter (model, name) =
+  h 'li' (
+    h 'a' {
+      href = "##(name)"
+      className = { selected = model.filter == name }
+      onclick (e) =
+        e.preventDefault ()
+        model.filter = name
+    } (name)
   )
 
 info () =
@@ -78,6 +94,16 @@ isEnterKey (e) = e.keyCode == 13
 model = {
   title = ''
   todos = []
+  filter = 'All'
+
+  filters = {
+    All ()       = self.todos
+    Active ()    = [ t <- self.todos, @not t.completed, t ]
+    Completed () = [ t <- self.todos, t.completed, t ]
+  }
+
+  filteredTodos () =
+    self.filters.(self.filter).call(self)
 
   createTodo () =
     if (self.title != '')

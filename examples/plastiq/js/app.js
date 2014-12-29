@@ -1,7 +1,7 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({"/Users/joshuachisholm/projects/todomvc/examples/plastiq/app.pogo":[function(require,module,exports){
 (function() {
     var self = this;
-    var plastiq, h, bind, render, header, main, todoItem, footer, info, isEnterKey, model;
+    var plastiq, h, bind, render, header, main, todoItem, footer, filter, info, isEnterKey, model;
     plastiq = require("plastiq");
     h = plastiq.html;
     bind = plastiq.bind;
@@ -35,7 +35,7 @@
             }, "Mark all as complete"), h("ul#todo-list", function() {
                 var gen1_results, gen2_items, gen3_i, t;
                 gen1_results = [];
-                gen2_items = model.todos;
+                gen2_items = model.filteredTodos();
                 for (gen3_i = 0; gen3_i < gen2_items.length; ++gen3_i) {
                     t = gen2_items[gen3_i];
                     (function(t) {
@@ -80,7 +80,7 @@
             } else {
                 return " items left";
             }
-        }()), function() {
+        }()), h("ul#filters", filter(model, "All"), filter(model, "Active"), filter(model, "Completed")), function() {
             if (model.countCompleted() > 0) {
                 return h("button#clear-completed", {
                     onclick: function() {
@@ -90,6 +90,19 @@
                 }, "Clear completed (" + model.countCompleted() + ")");
             }
         }());
+    };
+    filter = function(model, name) {
+        return h("li", h("a", {
+            href: "#" + name,
+            className: {
+                selected: model.filter === name
+            },
+            onclick: function(e) {
+                var self = this;
+                e.preventDefault();
+                return model.filter = name;
+            }
+        }, name));
     };
     info = function() {
         return h("footer#info", h("p", "Double-click to edit a todo"), h("p", "Created with ", h("a", {
@@ -104,6 +117,51 @@
     model = {
         title: "",
         todos: [],
+        filter: "All",
+        filters: {
+            All: function() {
+                var self = this;
+                return self.todos;
+            },
+            Active: function() {
+                var self = this;
+                return function() {
+                    var gen4_results, gen5_items, gen6_i, t;
+                    gen4_results = [];
+                    gen5_items = self.todos;
+                    for (gen6_i = 0; gen6_i < gen5_items.length; ++gen6_i) {
+                        t = gen5_items[gen6_i];
+                        (function(t) {
+                            if (!t.completed) {
+                                return gen4_results.push(t);
+                            }
+                        })(t);
+                    }
+                    return gen4_results;
+                }();
+            },
+            Completed: function() {
+                var self = this;
+                return function() {
+                    var gen7_results, gen8_items, gen9_i, t;
+                    gen7_results = [];
+                    gen8_items = self.todos;
+                    for (gen9_i = 0; gen9_i < gen8_items.length; ++gen9_i) {
+                        t = gen8_items[gen9_i];
+                        (function(t) {
+                            if (t.completed) {
+                                return gen7_results.push(t);
+                            }
+                        })(t);
+                    }
+                    return gen7_results;
+                }();
+            }
+        },
+        filteredTodos: function() {
+            var self = this;
+            return self.filters[self.filter].call(self);
+        },
         createTodo: function() {
             var self = this;
             if (self.title !== "") {
@@ -123,33 +181,33 @@
             var completed;
             completed = !self.allCompleted();
             return function() {
-                var gen4_results, gen5_items, gen6_i, t;
-                gen4_results = [];
-                gen5_items = self.todos;
-                for (gen6_i = 0; gen6_i < gen5_items.length; ++gen6_i) {
-                    t = gen5_items[gen6_i];
+                var gen10_results, gen11_items, gen12_i, t;
+                gen10_results = [];
+                gen11_items = self.todos;
+                for (gen12_i = 0; gen12_i < gen11_items.length; ++gen12_i) {
+                    t = gen11_items[gen12_i];
                     (function(t) {
-                        return gen4_results.push(t.completed = completed);
+                        return gen10_results.push(t.completed = completed);
                     })(t);
                 }
-                return gen4_results;
+                return gen10_results;
             }();
         },
         countCompleted: function() {
             var self = this;
             return function() {
-                var gen7_results, gen8_items, gen9_i, t;
-                gen7_results = [];
-                gen8_items = self.todos;
-                for (gen9_i = 0; gen9_i < gen8_items.length; ++gen9_i) {
-                    t = gen8_items[gen9_i];
+                var gen13_results, gen14_items, gen15_i, t;
+                gen13_results = [];
+                gen14_items = self.todos;
+                for (gen15_i = 0; gen15_i < gen14_items.length; ++gen15_i) {
+                    t = gen14_items[gen15_i];
                     (function(t) {
                         if (t.completed) {
-                            return gen7_results.push(t);
+                            return gen13_results.push(t);
                         }
                     })(t);
                 }
-                return gen7_results;
+                return gen13_results;
             }().length;
         },
         allCompleted: function() {
@@ -159,18 +217,18 @@
         clearCompleted: function() {
             var self = this;
             return function() {
-                var gen10_results, gen11_items, gen12_i, t;
-                gen10_results = [];
-                gen11_items = [].concat(self.todos);
-                for (gen12_i = 0; gen12_i < gen11_items.length; ++gen12_i) {
-                    t = gen11_items[gen12_i];
+                var gen16_results, gen17_items, gen18_i, t;
+                gen16_results = [];
+                gen17_items = [].concat(self.todos);
+                for (gen18_i = 0; gen18_i < gen17_items.length; ++gen18_i) {
+                    t = gen17_items[gen18_i];
                     (function(t) {
                         if (t.completed) {
-                            return gen10_results.push(self.destroyTodo(t));
+                            return gen16_results.push(self.destroyTodo(t));
                         }
                     })(t);
                 }
-                return gen10_results;
+                return gen16_results;
             }();
         }
     };
